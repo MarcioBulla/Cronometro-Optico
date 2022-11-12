@@ -1,40 +1,29 @@
-from machine import Pin, I2C, ADC, Timer
-import time
-import ssd1306
+from machine import Pin, ADC
+from time import sleep_ms
+from rotary_irq_esp import RotaryIRQ
+from encoder_menu import * 
 
+# I2C Display
+SDA, SCL = Pin(4), Pin(5)
 
-sensor = Pin(5, Pin.IN)
+# Encoder
+CLK, DT, SW = 13, 12, Pin(14, Pin.IN)
 
-i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+# Leds
+LED_G, LED_R = Pin(0, Pin.OUT), Pin(2, Pin.OUT)
 
-oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+# Sensor IR
+IR_D, IR_A = Pin(16, Pin.IN), ADC(0)
 
-def convert(ms):
-    millisegundo = ms % 1000
-    segundos = ms // 1000
-    minutos = segundos // 60
-    segundos = segundos % 60
-    return str(minutos) + ":" + str(segundos) + ":" + str(millisegundo)
-def show_time(t):
-    oled.fill(0)
-    oled.text(str(t) ,1,1,1)
-    oled.show()
+set_data("red led", 1)
+set_data("green led", 0)
 
-    
-def att_display(t):
-    oled.show()
+setledgreen = get_integer(low_v=0, high_v=10, increment=1, caption="Green Led", field="green led")
+#setledred = get_integer(low_v=0, high_v=1, increment=1, caption="Red Led", field="red led")
+setledred = selection("LED VERMELHOR", [("LIGADO", "1"), ("DESLIGADO", "0")])
 
-timer = Timer(0)
+test_led = wrap_menu([("LED VERMELHOR", setledred), ("LED VERDE", setledgreen), ("!!BACK!!", back)])
+main_menu = wrap_menu([("TESTAR LEDs", test_led), ("SAIR", stop), ("LED VERDE", setledgreen)])
 
-timer.init(period = 10, mode=Timer.PERIODIC, callback=att_display)
-
-
-while True:
-    time.sleep_us(100)
-    if not sensor.value():
-        start = time.ticks_ms()
-        while not sensor.value():
-            oled.fill(0)
-            oled.text("Cronometrando", 1,1,1)
-            oled.text("ms: " + convert(time.ticks_diff(time.ticks_ms(), start)), 1,16,1)
-           
+main_menu()
+run_menu() 
