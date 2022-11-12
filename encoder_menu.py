@@ -58,8 +58,7 @@ def value():
     return encoder._value
 
 def set_encoder(value,min_value,max_value):
-    encoder._value = value
-    encoder.set(value,min_value,max_value)
+    encoder.set(value=value, min_val=min_value, max_val=max_value)
     
 
 #================================
@@ -182,8 +181,6 @@ class Menu():
         self.increment = 1      
         
     def on_scroll(self,value):
-        print(len(self.menu)-1)
-        print(value)
         "Just show the caption"
         self.index = value
         display('', self.menu[value][0])
@@ -194,7 +191,7 @@ class Menu():
     
     def on_current(self):
         "Set (and fix if necessary) the index"           
-        set_encoder(0,0,len(self.menu)-1)        
+        set_encoder(self.index,0,len(self.menu)-1)        
         display('', self.menu[self.index][0])
         
         
