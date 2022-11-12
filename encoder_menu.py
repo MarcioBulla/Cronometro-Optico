@@ -57,9 +57,9 @@ def display(text1,text2):
 def value():
     return encoder._value
 
-def set_encoder(value,min_value,max_value):
-    encoder.set(value=value, min_val=min_value, max_val=max_value)
-    
+def set_encoder(value,min_value,max_value, incr=1):
+    encoder.set(value=value, min_val=min_value, max_val=max_value, incr=incr)    
+
 
 #================================
 stack = []  # For storing position in menu
@@ -223,8 +223,9 @@ class GetInteger():
       
     def on_scroll(self,val):
         "Change the value displayed as we scroll"
+        print(val)
         self.value = val
-        display(self.caption,str(val * self.increment))
+        display(self.caption,str(val))
             
     def on_click(self):
         global menu_data
@@ -236,8 +237,8 @@ class GetInteger():
         "Make sure encode is set properly, set up data and display"
         self.get_initial_value()
         print('get_int',menu_data,self.value,encoder.value())
-        set_encoder(self.value,self.low_v,self.high_v)
-        display(self.caption,str(self.value * self.increment))
+        set_encoder(self.value,self.low_v,self.high_v, self.increment)
+        display(self.caption,str(self.value))
 
 
         
@@ -302,6 +303,7 @@ class Info():
         oled.show()
         
 class Selection():
+    
     "Return a string value from a menu like selection"
     def __init__(self,field,choices):
         global menu_data
@@ -348,7 +350,7 @@ class Selection():
         self.set_initial_value()
         set_encoder(self.index,0,len(self.choice)-1)
         display('',self.choice[self.index][0])
-        
+       
 #===================================
 # Functions for defining menus
  
