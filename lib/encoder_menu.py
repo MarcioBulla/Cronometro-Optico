@@ -32,7 +32,7 @@ encoder = RotaryIRQ(pin_num_clk=CLK,
               pin_num_dt=DT, 
               min_val=0, 
               max_val=100, 
-              reverse=False, 
+              reverse=True, 
               range_mode=RotaryIRQ.RANGE_WRAP,
               pull_up=True)
 
@@ -237,7 +237,7 @@ class GetInteger():
         "Make sure encode is set properly, set up data and display"
         self.get_initial_value()
         print('get_int',menu_data,self.value,encoder.value())
-        set_encoder(self.value,self.low_v,self.high_v, self.increment)
+        set_encoder(self.value,self.low_v,self.high_v + self.increment - 1, self.increment)
         display(self.caption,str(self.value))
 
 
@@ -385,5 +385,4 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
-
 
