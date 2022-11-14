@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Cronometro Optico</title>
+<title>Cronometro Optico: Montagem</title>
 <style type="text/css">
 .meta {
 	font-size: small;
@@ -28,6 +28,9 @@ td {
 </head>
 
 <body>
+<h1>Cronometro Optico: Montagem</h1>
+<p class="meta">https://github.com/MarcioBulla/Cronometro-Optico</p>
+
 
 <h2>Assembly List</h2>
 <table>
@@ -41,17 +44,17 @@ td {
   </thead>
   <tbody>
   <tr>
-    <td>LED3</td>
-    <td>Green LED - Rect 5x2x7mm</td>
-    <td class="props">package 5x2x7 mm [THT]; variant variant 2; leg yes; led color Green (555nm)</td>
-</tr><tr>
-    <td>LED4</td>
+    <td>LED1</td>
     <td>Red LED - Rect 5x2x7mm</td>
-    <td class="props">package 5x2x7 mm [THT]; variant variant 1; leg yes; led color Red (633nm)</td>
+    <td class="props">variant variant 1; leg yes; package 5x2x7 mm [THT]; led color Red (633nm)</td>
+</tr><tr>
+    <td>LED2</td>
+    <td>Green LED - Rect 5x2x7mm</td>
+    <td class="props">variant variant 2; leg yes; package 5x2x7 mm [THT]; led color Green (555nm)</td>
 </tr><tr>
     <td>M1</td>
     <td>fc-51</td>
-    <td class="props">package THT; variant variant 1; editable pin labels false; layout Single Row; pin spacing 100mil; pins 3</td>
+    <td class="props">editable pin labels false; variant variant 1; pins 3; pin spacing 100mil; package THT; layout Single Row</td>
 </tr><tr>
     <td>OLED I2C1</td>
     <td>OLED 128x64 I2C Monochrome Display</td>
@@ -59,15 +62,15 @@ td {
 </tr><tr>
     <td>R1</td>
     <td>150Ω Resistor</td>
-    <td class="props">power 0.25W; package 1206 [SMD]; resistance 150Ω; tolerance ±5%</td>
+    <td class="props">resistance 150Ω; pin spacing 400 mil; tolerance ±5%; power 0.25; bands 4; package THT</td>
 </tr><tr>
     <td>R2</td>
     <td>150Ω Resistor</td>
-    <td class="props">power 0.25W; package 1206 [SMD]; resistance 150Ω; tolerance ±5%</td>
+    <td class="props">resistance 150Ω; pin spacing 400 mil; tolerance ±5%; power 0.25; bands 4; package THT</td>
 </tr><tr>
-    <td>RE2</td>
+    <td>RE1</td>
     <td>KY-040 Rotary encoder</td>
-    <td class="props">package THT; variant variant 2; has_switch true; type KY-040</td>
+    <td class="props">variant variant 2; has_switch true; type KY-040; package THT</td>
 </tr><tr>
     <td>U1</td>
     <td>NodeMCU V3.0</td>
@@ -87,16 +90,16 @@ td {
   <tbody>
 <tr>
     <td>1</td>
-    <td>Green LED - Rect 5x2x7mm</td>
-    <td class="props">package 5x2x7 mm [THT]; variant variant 2; leg yes; led color Green (555nm)</td>
+    <td>Red LED - Rect 5x2x7mm</td>
+    <td class="props">variant variant 1; leg yes; package 5x2x7 mm [THT]; led color Red (633nm)</td>
 </tr><tr>
     <td>1</td>
-    <td>Red LED - Rect 5x2x7mm</td>
-    <td class="props">package 5x2x7 mm [THT]; variant variant 1; leg yes; led color Red (633nm)</td>
+    <td>Green LED - Rect 5x2x7mm</td>
+    <td class="props">variant variant 2; leg yes; package 5x2x7 mm [THT]; led color Green (555nm)</td>
 </tr><tr>
     <td>1</td>
     <td>fc-51</td>
-    <td class="props">package THT; variant variant 1; editable pin labels false; layout Single Row; pin spacing 100mil; pins 3</td>
+    <td class="props">editable pin labels false; variant variant 1; pins 3; pin spacing 100mil; package THT; layout Single Row</td>
 </tr><tr>
     <td>1</td>
     <td>OLED 128x64 I2C Monochrome Display</td>
@@ -104,11 +107,11 @@ td {
 </tr><tr>
     <td>2</td>
     <td>150Ω Resistor</td>
-    <td class="props">power 0.25W; package 1206 [SMD]; resistance 150Ω; tolerance ±5%</td>
+    <td class="props">resistance 150Ω; pin spacing 400 mil; tolerance ±5%; power 0.25; bands 4; package THT</td>
 </tr><tr>
     <td>1</td>
     <td>KY-040 Rotary encoder</td>
-    <td class="props">package THT; variant variant 2; has_switch true; type KY-040</td>
+    <td class="props">variant variant 2; has_switch true; type KY-040; package THT</td>
 </tr><tr>
     <td>1</td>
     <td>NodeMCU V3.0</td>
@@ -116,5 +119,6 @@ td {
 </tr>
   </tbody>
 </table>
+
 </body>
 </html>
