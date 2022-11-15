@@ -385,4 +385,3 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
-
