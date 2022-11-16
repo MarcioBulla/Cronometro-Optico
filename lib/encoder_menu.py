@@ -318,6 +318,39 @@ class Info():
         for i,a in enumerate(self.message.split('\n')):
             oled.text(a,0,i*12)
         oled.show()
+
+
+class Hist():
+    "Show some information on the display.  "
+    def __init__(self,oled, field, title):
+        self.index = 0
+        self.oled = oled
+        self.field = field
+        self.title = title
+        
+    def on_scroll(self,val):
+        self.index = val
+        display_ops(self.text, self.index)
+        oled.show()
+        
+    def on_click(self):
+        back()
+    
+    def mount_hist(self):
+        global menu_data
+        self.text = []
+        for TN, time in menu_data.get(self.field):
+            self.text.append(["N: "+str(TN)+ "   "+ "T: "+str(time), None])
+        print(self.text)
+        print(self.text[self.index -1][0])
+    
+    
+    def on_current(self):
+        self.mount_hist()
+        set_encoder(self.index,0,len(self.text)-1)
+        display_title(self.title)
+        display_ops(self.text, self.index)
+        oled.show()
         
 class Selection():
     
@@ -346,10 +379,7 @@ class Selection():
             #   print('match')
                self.index = i
                break
-               #break
-     #   print('init index',self.choice[self.index])
-    #    print(menu_data)
-
+ 
     
 
     def on_scroll(self,val):
@@ -390,6 +420,10 @@ def info(string):
     "Wrap simple text output into menu"
     return wrap_object(Info(string))
 
+def hist(oled, field, title):
+    "Wrap simple text output into menu"
+    return wrap_object(Hist(oled, field, title))
+
 def selection(field,mylist):
     "Wrap a selection into menu"
     return wrap_object(Selection(field,mylist))
@@ -402,4 +436,3 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
-

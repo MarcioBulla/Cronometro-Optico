@@ -7,8 +7,8 @@ IR = Pin(16, Pin.IN)
 
 class Pendulo():
     
-    def __init__(self, menu_data, IR, LED):
-        global oled
+    def __init__(self,IR, LED):
+        global oled, menu_data
         self.oled = oled
         self.count = 0
         self.hist = menu_data.get("Pendulo")
@@ -63,6 +63,7 @@ class Pendulo():
         self.oled.show()
     
     def on_current(self):
+        global menu_data
         self.START = None
         self.END = None
         self.NT = menu_data.get("pend_N", 5)
@@ -74,6 +75,6 @@ class Pendulo():
         self.start = make_task(self.start_pend, self.NT, self.IR)
         
         
-def pendulo(menu_data=menu_data, IR=IR, LED=LED):
+def pendulo(IR=IR, LED=LED):
     "Wrap simple text output into "
-    return wrap_object(Pendulo(menu_data, IR, LED))
+    return wrap_object(Pendulo(IR, LED))

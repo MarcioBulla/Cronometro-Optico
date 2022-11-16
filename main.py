@@ -21,9 +21,10 @@ BACK = ("Voltar", back)
 
 # Pendulo
 pend_nperidos = get_integer(low_v=1, high_v=10, increment=1, caption="N° Periodos", field="pend_N")
-#pend_hist = hist(oled, "Pendulo", "Hist: Pendulo")
+pend_hist = hist(oled, "Pendulo", "Hist: Pendulo")
+
 ## menu
-pend_menu = wrap_menu("Pendulo", [("START", pendulo()), ("Config", pend_nperidos), ("Historico", dummy), BACK])
+pend_menu = wrap_menu("Pendulo", [("START", pendulo()), ("Config", pend_nperidos), ("Historico", pend_hist), BACK])
 # Eng Mec
 
 ## menu
