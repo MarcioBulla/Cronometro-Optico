@@ -24,7 +24,8 @@ button = SW
 
 i2c = I2C(scl=SCL, sda=SDA, freq=100000)
 
-led = Pin(1)
+LED = Pin(0, Pin.OUT)
+LED.off()
 
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
@@ -53,7 +54,20 @@ def display(text1,text2):
     oled.text(text1,0,0)
     oled.text(text2,0,30)
     oled.show() 
+
+def display_ops(menu, value):
+    oled.fill_rect(0,16,  128,48,  0)
+    oled.text(menu[value-1][0] , 0, 21, 1)
+    oled.fill_rect(0,32,  128,16,  1)
+    oled.text(menu[value][0] , 0, 37, 0)
+    oled.text(menu[value - len(menu)+1][0] , 0, 53, 1)
+
+def display_title(title):
+    oled.fill_rect(0,0, 128,16, 0)
+    oled.text(title, 0, 5, 1)
     
+
+
 def value():
     return encoder._value
 
@@ -91,10 +105,10 @@ def set_global_exception():
 def mainloop():
     "An asynchronous main loop"
     set_global_exception()
-    global led
+    #global led
 
     while True:
-        led(not led())
+       # led(not led())
         await step()
         
 def run_async(func):
@@ -152,9 +166,7 @@ def set_current(obj):
 #=======================
     # Task related
 
-def stop():
-    "Convenience function for stopping tasks"
-    global task
+def stop(task):
     """Our routine (neopixels in this case) is stored in a task.
     That allows us to cancel it"""
     try:
@@ -164,10 +176,10 @@ def stop():
         pass
 
  
-def make_task(func):
+def make_task(func, *args):
     "convenience function  for starting tasks"
-    global task
-    task = asyncio.create_task(func())
+    print(f"taks args: {args}")
+    return asyncio.create_task(func(*args))
 
 
 #=============================
@@ -175,15 +187,18 @@ def make_task(func):
   
 class Menu():
     "Show a menu on a tiny dispaly by turning a rotatry encoder"
-    def __init__(self, menu):
+    def __init__(self,title, menu):
         self.menu = menu
+        self.title = title
         self.index = 0
         self.increment = 1      
         
     def on_scroll(self,value):
         "Just show the caption"
         self.index = value
-        display('', self.menu[value][0])
+        # print(self.index)
+        display_ops(self.menu, self.index)
+        oled.show()
         
     def on_click(self):
         "Execute the menu item's function"
@@ -191,8 +206,10 @@ class Menu():
     
     def on_current(self):
         "Set (and fix if necessary) the index"           
-        set_encoder(self.index,0,len(self.menu)-1)        
-        display('', self.menu[self.index][0])
+        set_encoder(self.index,0,len(self.menu)-1)
+        display_title(self.title)
+        display_ops(self.menu, self.index)
+        oled.show()
         
         
 class GetInteger():
@@ -223,7 +240,7 @@ class GetInteger():
       
     def on_scroll(self,val):
         "Change the value displayed as we scroll"
-        print(val)
+        #print(val)
         self.value = val
         display(self.caption,str(val))
             
@@ -361,9 +378,9 @@ def  wrap_object(myobject):
         set_current(myobject)
     return mywrap
 
-def wrap_menu(mymenulist):
+def wrap_menu(title, mymenulist):
     "wrap a list into a function so it can be set from within the menu"
-    return wrap_object(Menu(mymenulist))
+    return wrap_object(Menu(title, mymenulist))
 
 def wizard(mymenu):
     "Wrap a wizard list into a menu action"
@@ -385,3 +402,4 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
+
