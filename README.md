@@ -7,6 +7,7 @@
 
 # Bibliotecas usadas
 - `encoder_menu.py`: https://github.com/sgall17a/encodermenu
+	- Biblioteca customizada para o funcionamento do projeto.
 - `rotary.py` e `rotary_irq_esp.py`: https://github.com/miketeachman/micropython-rotary
 - `ssd1306.py`: https://github.com/stlehmann/micropython-ssd1306
 
