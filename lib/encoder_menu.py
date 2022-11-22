@@ -178,7 +178,7 @@ def stop(task):
  
 def make_task(func, *args):
     "convenience function  for starting tasks"
-    print(f"taks args: {args}")
+    # print(f"taks args: {args}")
     return asyncio.create_task(func(*args))
 
 
@@ -253,7 +253,7 @@ class GetInteger():
     def on_current(self):
         "Make sure encode is set properly, set up data and display"
         self.get_initial_value()
-        print('get_int',menu_data,self.value,encoder.value())
+        # print('get_int',menu_data,self.value,encoder.value())
         set_encoder(self.value,self.low_v,self.high_v + self.increment - 1, self.increment)
         display(self.caption,str(self.value))
 
@@ -341,8 +341,8 @@ class Hist():
         self.text = []
         for TN, time in menu_data.get(self.field):
             self.text.append(["N: "+str(TN)+ "   "+ "T: "+str(time), None])
-        print(self.text)
-        print(self.text[self.index -1][0])
+        # print(self.text)
+        # print(self.text[self.index -1][0])
     
     
     def on_current(self):
@@ -436,3 +436,4 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
+

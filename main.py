@@ -3,11 +3,7 @@ from machine import Pin
 from cronos import *
 
 # set_data(key=, value=) 
-
-
 set_data("Pendulo", [])
-set_data("pend_N", 5)
-
 
 
 # get_integer(low_v=, high_v=, increment=, caption=, field=)
@@ -34,9 +30,9 @@ engmec_menu = wrap_menu("Energia Mec", [("Config", dummy), ("START", dummy), ("H
 ## menu
 mola_menu = wrap_menu("Mola", [("Config", dummy), ("START", dummy), ("Historico", dummy), BACK])
 # Main Menu
-main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Eng Mec",engmec_menu), ("Mola", mola_menu)])
+main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mec",engmec_menu), ("Mola", mola_menu)])
 
 # Start
 main_menu()
-#pend_menu()
 run_menu() 
+
