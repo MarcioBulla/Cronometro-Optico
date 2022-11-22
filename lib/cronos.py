@@ -28,65 +28,123 @@ async def crono(inicio, N_mud):
         if state != IR.value():
             COUNT += 1
     END = ticks_ms()
-    
+    print(f"START: {START}")
+    print(f"END: {END}")
+
+async def show_display(display):
+    global START, END
+    display(0)    
+    oled.show()
+    while not START:
+        await asyncio.sleep(1/60)
+    while not END:
+        display(ticks_diff(ticks_ms(), START))    
+        oled.show()
+        await asyncio.sleep(1/60)
+    display(ticks_diff(END, START))    
+    oled.show()
+
     
 class Pendulo():
     
-    def __init__(self,IR, LED):
-        global oled, menu_data
-        self.oled = oled
-        self.count = 0
+    def __init__(self):
+        global menu_data
         self.hist = menu_data.get("Pendulo")
-        self.IR = IR
-        self.LED = LED
 
     def on_scroll(self,val):
         pass
         
     def on_click(self):
-        global COUNT, START, END
+        global COUNT, START, END, LED
         stop(self.show)
         stop(self.start)
         if END != 0:
-            self.hist.append((self.NT, self.time))
+            self.hist.append((self.NT, ticks_diff(END, START)))
         print(self.hist)
         COUNT = 1
         START = 0
         END = 0
-        self.LED.off()
+        LED.off()
         back()
     
     def display_pend(self, time):
-        global COUNT
-        self.oled.fill_rect(0,16,  128,48,  0)
-        self.oled.text(f"Periodos: {str(self.NT)}", 0, 20, 1)
-        self.oled.text(f"Foi: {str(COUNT//4)}", 0, 30, 1)
-        self.oled.text(f"Tempo: {str(time)}",0,56, 1)
-    
-    async def show_pend(self,NT):
-        global START, END
-        self.display_pend(0)    
-        self.oled.show()
-        while not START:
-            await asyncio.sleep(1/60)
-        while not END:
-            self.display_pend(ticks_diff(ticks_ms(), START))    
-            self.oled.show()
-            await asyncio.sleep(1/60)
-        self.time = ticks_diff(END, START)
-        self.display_pend(self.time)    
-        self.oled.show()
+        global COUNT, oled
+        oled.fill_rect(0,16,  128,48,  0)
+        oled.text(f"Periodos: {str(self.NT)}", 0, 20, 1)
+        oled.text(f"Foi: {str(COUNT//4)}", 0, 30, 1)
+        oled.text(f"Tempo: {str(time)}",0,56, 1)
            
     def on_current(self):
-        self.LED.on()
-        global menu_data
+        global LED, menu_data
+        LED.on()
         self.NT = menu_data.get("pend_N", 5)
-        self.oled.fill(0)
-        self.oled.text("Pendulo", 5,0, 1)
-        self.show = make_task(self.show_pend, self.NT)
+        
+        oled.fill(0)
+        oled.text("Pendulo", 5,0, 1)
+        self.show = make_task(show_display, self.display_pend)
         self.start = make_task(crono, 0, self.NT*4+1)
-
-
-def pendulo(IR=IR, LED=LED):
+        
+    
+class Energy():
+    
+    def __init__(self):
+        global menu_data
+        self.hist = menu_data.get("Energy")
+    
+    
+    def on_scroll(self, val):
+        pass
+    
+    
+    def on_click(self):
+        global COUNT, START, END, LED
+        
+        stop(self.show)
+        stop(self.start)
+        
+        if END != 0:
+            self.hist.append((self.cylinder, ticks_diff(END, START)))
+        print(self.hist)
+        
+        COUNT = 1
+        START = 0
+        END = 0
+        
+        LED.off()
+        back()
+        
+    
+    def display_energy(self, time):
+        global COUNT, oled
+        oled.fill_rect(0,16,  128,48,  0)
+        oled.text(f"cilin: {self.cylinder}", 0, 20, 1)
+        oled.text(f"Tempo: {str(time)}",0,56, 1)
+        
+    
+    def on_current(self):
+        global LED, menu_data
+        LED.on()
+        self.cylinder = menu_data.get("cylinder", "solido")
+        
+        
+        oled.fill(0)
+        oled.text("Pendulo", 5,0, 1)
+        self.show = make_task(show_display, self.display_energy)
+        
+        if self.cylinder == "solido":
+            self.start = make_task(crono, 1, 2)
+        elif self.cylinder == "oco 2*int":
+            self.start = make_task(crono, 0, 2)
+        elif self.cylinder == "oco 2*ext":
+            self.start = make_task(crono, 1, 4)
+        else:
+            self.start = make_task(crono, 1, 3)
+            
+        
+def pendulo():
     "Função para o pendulo"
-    return wrap_object(Pendulo(IR, LED))
+    return wrap_object(Pendulo())
+
+def energy():
+    "Função para o pendulo"
+    return wrap_object(Energy())
