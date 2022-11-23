@@ -37,7 +37,7 @@ energy_config = selection("cylinder", [("Solido", "sol"), ("2 * Interno", "2*I")
 energy_hist = hist(oled, "Energy", "Hist: Energy")
 
 ## menu Energia Mecanica
-energy_menu = wrap_menu("Energia Mec", [("START", energy()), ("Config", energy_config), ("Historico", energy_hist), BACK])
+energy_menu = wrap_menu("Energia Mecanica", [("START", energy()), ("Config", energy_config), ("Historico", energy_hist), BACK])
 
 
 # Mola
@@ -47,19 +47,25 @@ mola_hist = hist(oled, "Mola", "Hist: Mola")
 ## menu Mola
 mola_menu = wrap_menu("Mola", [("START", mola()), ("Config", mola_config), ("Historico", mola_hist), BACK])
 
+
 # Calibragem
-bias = get_integer(low_v=0, high_v=1000, increment=10, caption="Bias", field="bias", save=True)
-escala = get_integer(low_v=.5, high_v=1.5, increment=0.01, caption="Escala", field="escala", rounded=True, deci=2, save=True)
+bias_centena = get_integer(low_v=-1000, high_v=0, increment=100, caption="Bias Centena (ms)", field="bias", save=True)
+bias_dezena = get_integer(low_v=-1000, high_v=0, increment=10, caption="Bias Dezena (ms)", field="bias", save=True)
+bias_unidade = get_integer(low_v=-1000, high_v=0, increment=1, caption="Bias Unidade (ms)", field="bias", save=True)
+bias = wizard([("Bias Centena",bias_centena),("Bias Dezena",bias_dezena),("Bias Unidade (ms)",bias_unidade)])
+
+
+# Criadores
+criadores = info("Orientador:\n  Fabiano\nDevOps:\n  Marcio Bulla\n  Jessica Lo")
+
 
 ## menu Calibragem
-cal_menu = wrap_menu("Calibragem", [("Bias", bias), ("Escala", escala), BACK])
+extra = wrap_menu("Extras", [("Calibragem Bias", bias), ("Desenvolvedores", criadores), BACK])
 
 
 # Main Menu
-main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mec",energy_menu), ("Mola", mola_menu), ("Calibragem", cal_menu)])
+main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mecanica",energy_menu), ("Mola", mola_menu), ("Extras", extra)])
 
 # Start
 main_menu()
-#pend_menu()
 run_menu() 
-

@@ -32,7 +32,7 @@ async def crono(inicio, N_mud):
     print(f"END: {END}")
 
 async def show_display(display):
-    global START, END
+    global START, END, menu_data
     display(0)    
     oled.show()
     while not START:
@@ -45,7 +45,19 @@ async def show_display(display):
     oled.show()
 
 def convert(time):
-    return f"{time//1000:<1}:{time%1000:<03}"
+    global menu_data
+    bias = menu_data.get("bias")
+    print(f"bias: {bias}")
+    print(time)
+    time += bias
+    if time < 0:
+        s = time//-1000
+        ms = time%-1000
+    else:    
+        s = time//1000
+        ms = time%1000
+    print(s, ms)
+    return f"{s:>02}:{ms:>03}"
     
 class Pendulo():
     
@@ -93,7 +105,6 @@ class Energy():
         global menu_data
         self.hist = menu_data.get("Energy")
     
-    
     def on_scroll(self, val):
         pass
     
@@ -130,7 +141,7 @@ class Energy():
         
         
         oled.fill(0)
-        oled.text("Energia Mecânica", 5,0, 1)
+        oled.text("Energia Mecanica", 5,0, 1)
         self.show = make_task(show_display, self.display)
         
         if self.cylinder == "sol":
@@ -196,10 +207,10 @@ def pendulo():
     return wrap_object(Pendulo())
 
 def energy():
-    "Função para o Energia Mecanica"
+    "Função para a Energia Mecanica"
     return wrap_object(Energy())
 
 def mola():
-    "Função para o Energia Mecanica"
+    "Função para a mola"
     return wrap_object(Mola())
 
