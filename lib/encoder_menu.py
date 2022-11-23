@@ -1,6 +1,6 @@
 #import math
 from machine import Pin, I2C
-import ssd1306
+from ssd1306 import SSD1306_I2C
 import sys
 import time
 
@@ -27,7 +27,7 @@ i2c = I2C(scl=SCL, sda=SDA, freq=100000)
 LED = Pin(0, Pin.OUT)
 LED.off()
 
-oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+oled = SSD1306_I2C(128, 64, i2c)
 
 encoder = RotaryIRQ(pin_num_clk=CLK, 
               pin_num_dt=DT, 
@@ -56,6 +56,7 @@ def display(text1,text2):
     oled.show() 
 
 def display_ops(menu, value):
+    global oled
     oled.fill_rect(0,16,  128,48,  0)
     oled.text(menu[value-1][0] , 0, 21, 1)
     oled.fill_rect(0,32,  128,16,  1)
@@ -338,10 +339,10 @@ class Hist():
     
     def mount_hist(self):
         global menu_data
-        self.text = []
-        for TN, time in menu_data.get(self.field):
-            self.text.append(["N: "+str(TN)+ "   "+ "T: "+str(time), None])
-        # print(self.text)
+        self.hist = menu_data.get(self.field, "Vazio")
+        print(self.hist)
+        self.text = [("N="+str(num)+";"+i,"") for num, i in enumerate(self.hist)]
+        print(self.text)
         # print(self.text[self.index -1][0])
     
     
