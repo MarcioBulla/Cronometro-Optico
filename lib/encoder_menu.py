@@ -1,15 +1,14 @@
 from machine import Pin, I2C
-from ssd1306 import SSD1306_I2C
 import sys
-import time
-
+from json import dump, load
+from ssd1306 import SSD1306_I2C
 import uasyncio as asyncio
 
 # I2C Display
-SDA, SCL = Pin(4), Pin(5)
+SDA, SCL = Pin(21), Pin(22)
 
 # Encoder
-CLK, DT, SW = 13, 12, Pin(14, Pin.IN)
+CLK, DT, button = 35, 34, Pin(39)
 
 #from guimenu importMenu
 #import _thread
@@ -18,12 +17,10 @@ CLK, DT, SW = 13, 12, Pin(14, Pin.IN)
 from rotary_irq_esp  import RotaryIRQ
 #import uasyncio as asyncio
 
-button = SW
-
 
 i2c = I2C(scl=SCL, sda=SDA, freq=100000)
 
-LED = Pin(0, Pin.OUT)
+LED = Pin(32, Pin.OUT)
 LED.off()
 
 oled = SSD1306_I2C(128, 64, i2c)
@@ -215,7 +212,7 @@ class Menu():
 class GetInteger():
     "Get an integer value by scrolling (or turning the encoder shaft)"
     global menu_data
-    def __init__(self,low_v=0,high_v=100,increment=10, caption='plain',field='datafield',default=0):
+    def __init__(self,low_v=0,high_v=100,increment=10, caption='plain',field='datafield',default=0, rounded=False, deci=0, save=False):
         self.field = field  #for collecting data
         self.caption = caption #caption is fixed in get_integer mode
         self.increment = increment
@@ -225,6 +222,9 @@ class GetInteger():
         self.default = default
         self.value = 0
         self.get_initial_value()
+        self.rounded = rounded
+        self.deci = deci
+        self.save = save
 
     def get_initial_value(self):
         #print('init value',self.value,self.increment,self.default,self.field)
@@ -241,13 +241,19 @@ class GetInteger():
     def on_scroll(self,val):
         "Change the value displayed as we scroll"
         #print(val)
-        self.value = val
-        display(self.caption,str(val))
+        self.value = round(val,self.deci) if self.rounded else val
+        display(self.caption,str(self.value))
             
     def on_click(self):
         global menu_data
         "Store the displayed value and go back up the menu"
         menu_data[self.field]= self.value
+        if self.save:
+            with open("calibration.json", "r") as file:
+                cal = load(file)
+            cal[self.field] = self.value
+            with open("calibration.json", "w") as file:
+                dump(cal, file)
         back()
         
     def on_current(self):
@@ -358,9 +364,8 @@ def selection(field,mylist):
     "Wrap a selection into menu"
     return wrap_object(Selection(field,mylist))
 
-def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafield',default='DEF'):
+def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafield',default='DEF', rounded=False, deci=0, save=False):
     "Wrap integer entry into menu"
-    return wrap_object(GetInteger(low_v,high_v,increment, caption,field,default))
-
+    return wrap_object(GetInteger(low_v,high_v,increment, caption,field,default, rounded, deci, save))
 
 

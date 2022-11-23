@@ -3,7 +3,7 @@ from encoder_menu import *
 from machine import Pin
 
 # Sensor IR
-IR = Pin(16, Pin.IN)
+IR = Pin(36, Pin.IN)
 
 COUNT = 1
 N_mud = 0

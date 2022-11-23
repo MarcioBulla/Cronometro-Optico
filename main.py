@@ -1,7 +1,16 @@
 from encoder_menu import * 
 from cronos import *
+from ujson import load
+from machine import freq
+print(gc.mem_free(), gc.mem_alloc())
+
+freq(240000000)
 
 # set_data(key=, value=) 
+with open("calibration.json", "r") as file:
+    for key, value in load(file).items():
+        set_data(key, value)
+
 set_data("Pendulo", [])
 set_data("Energy", [])
 set_data("Mola", [])
@@ -11,7 +20,7 @@ set_data("Mola", [])
 # wizard funciona como um wrap_menu porem como uma sequencia de funções
 # exemplo de wizard
 # wizard([("Hours",sethours),("Minutes",setminutes),("Seconds",setseconds)])
-
+print(menu_data)
 
 BACK = ("Voltar", back)
 
@@ -36,16 +45,21 @@ mola_config = get_integer(low_v=1, high_v=9, increment=1, caption="N° Periodos"
 mola_hist = hist(oled, "Mola", "Hist: Mola")
 
 ## menu Mola
-mola_menu = wrap_menu("Mola", [("Config", mola_config), ("START", mola()), ("Historico", mola_hist), BACK])
+mola_menu = wrap_menu("Mola", [("START", mola()), ("Config", mola_config), ("Historico", mola_hist), BACK])
+
+# Calibragem
+bias = get_integer(low_v=0, high_v=1000, increment=10, caption="Bias", field="bias", save=True)
+escala = get_integer(low_v=.5, high_v=1.5, increment=0.01, caption="Escala", field="escala", rounded=True, deci=2, save=True)
+
+## menu Calibragem
+cal_menu = wrap_menu("Calibragem", [("Bias", bias), ("Escala", escala), BACK])
 
 
 # Main Menu
-main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mec",energy_menu), ("Mola", mola_menu)])
+main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mec",energy_menu), ("Mola", mola_menu), ("Calibragem", cal_menu)])
 
 # Start
-# print(gc.mem_free(), gc.mem_alloc())
 main_menu()
 #pend_menu()
 run_menu() 
-
 
