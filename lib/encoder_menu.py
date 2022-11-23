@@ -1,4 +1,3 @@
-#import math
 from machine import Pin, I2C
 from ssd1306 import SSD1306_I2C
 import sys
@@ -257,69 +256,7 @@ class GetInteger():
         # print('get_int',menu_data,self.value,encoder.value())
         set_encoder(self.value,self.low_v,self.high_v + self.increment - 1, self.increment)
         display(self.caption,str(self.value))
-
-
         
-class Wizard():
-    global stack
-    """The wizard is a type of menu that  executes its own "leaves" in sequence"""
-     
-    def __init__(self,menu):
-
-        self.menu      = menu
-        self.index     = 0
-        self.increment = 1       
-        
-    def on_scroll(self,value):
-        "pass scroll event to leaf"
-        self.device.on_scroll(value)
-        
-    def on_click(self):
-        "exeute menu fn()->self.device. Fix stack and current"
-        
-        global current
-        self.index += 1
-        if self.index  > len(self.menu)-1:
-            self.device.on_click()  #end of list so just go back
-        else:
-            self.device.on_click() #will pop ourself
-            stack.append(self) #so put ourself back
-            (self.menu[self.index][1])()#will push device
-            self.device=current
-            current=self
-            stack.pop() #so we have to pop device
-                
-    def on_current(self):
-        #Handle clicks to get entries in sequence
-        #Pass scroll events on to the device.
-        #(This requires fiddling the value of stack and current)
-        global current
-        self.index = 0 #always start at the beginning
-        (self.menu[0][1])() #do menu function which puts a new object in current
-        self.device = current #Now capture current
-        current = self # restore current to self
-        stack.pop() # the function pushes,so we have to pop()
-
-
-        
-        
-class Info():
-    "Show some information on the display.  "
-    def __init__(self,message):
-        self.message = message
-        
-    def on_scroll(self,val):
-        pass
-        
-    def on_click(self):
-        back()
-        
-    def on_current(self):
-        oled.fill(0)
-        for i,a in enumerate(self.message.split('\n')):
-            oled.text(a,0,i*12)
-        oled.show()
-
 
 class Hist():
     "Show some information on the display.  "
@@ -413,14 +350,6 @@ def wrap_menu(title, mymenulist):
     "wrap a list into a function so it can be set from within the menu"
     return wrap_object(Menu(title, mymenulist))
 
-def wizard(mymenu):
-    "Wrap a wizard list into a menu action"
-    return wrap_object(Wizard(mymenu))
-
-def info(string):
-    "Wrap simple text output into menu"
-    return wrap_object(Info(string))
-
 def hist(oled, field, title):
     "Wrap simple text output into menu"
     return wrap_object(Hist(oled, field, title))
@@ -434,7 +363,4 @@ def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafiel
     return wrap_object(GetInteger(low_v,high_v,increment, caption,field,default))
 
 
-def dummy():
-    "Just a valid dummy function to fill menu actions while we are developing"
-    pass   
 

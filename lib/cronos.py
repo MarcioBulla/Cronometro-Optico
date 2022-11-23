@@ -61,7 +61,7 @@ class Pendulo():
         stop(self.show)
         stop(self.start)
         if END != 0:
-            self.hist.append((f"P={self.NT:<1};T={convert(ticks_diff(END, START)):<4}"))
+            self.hist.append(f"P={self.NT:<1};T={convert(ticks_diff(END, START)):<4}")
         print(self.hist)
         COUNT = 1
         START = 0
@@ -69,7 +69,7 @@ class Pendulo():
         LED.off()
         back()
     
-    def display_pend(self, time):
+    def display(self, time):
         global COUNT, oled
         oled.fill_rect(0,16,  128,48,  0)
         oled.text(f"Periodos: {str(self.NT)}", 0, 20, 1)
@@ -83,7 +83,7 @@ class Pendulo():
         
         oled.fill(0)
         oled.text("Pendulo", 5,0, 1)
-        self.show = make_task(show_display, self.display_pend)
+        self.show = make_task(show_display, self.display)
         self.start = make_task(crono, 0, self.NT*4+1)
         
     
@@ -105,7 +105,7 @@ class Energy():
         stop(self.start)
         
         if END != 0:
-            self.hist.append((f"{self.cylinder:<3};T={convert(ticks_diff(END, START)):<4}"))
+            self.hist.append(f"{self.cylinder:<3};T={convert(ticks_diff(END, START)):<4}")
         print(self.hist)
         
         COUNT = 1
@@ -116,7 +116,7 @@ class Energy():
         back()
         
     
-    def display_energy(self, time):
+    def display(self, time):
         global COUNT, oled
         oled.fill_rect(0,16,  128,48,  0)
         oled.text(f"cilin: {self.cylinder}", 0, 20, 1)
@@ -130,8 +130,8 @@ class Energy():
         
         
         oled.fill(0)
-        oled.text("Pendulo", 5,0, 1)
-        self.show = make_task(show_display, self.display_energy)
+        oled.text("Energia Mecânica", 5,0, 1)
+        self.show = make_task(show_display, self.display)
         
         if self.cylinder == "sol":
             self.start = make_task(crono, 1, 2)
@@ -141,12 +141,65 @@ class Energy():
             self.start = make_task(crono, 1, 4)
         else:
             self.start = make_task(crono, 1, 3)
-            
+
+class Mola():
+    
+    def __init__(self):
+        global menu_data
+        self.hist = menu_data.get("Mola")
+    
+    
+    def on_scroll(self, val):
+        pass
+    
+    
+    def on_click(self):
+        global COUNT, START, END, LED
+        
+        stop(self.show)
+        stop(self.start)
+        
+        if END != 0:
+            self.hist.append(f"P={self.NT:<1};T={convert(ticks_diff(END, START)):<4}")
+        print(self.hist)
+        
+        COUNT = 1
+        START = 0
+        END = 0
+        
+        LED.off()
+        back()
+        
+    
+    def display(self, time):
+        global COUNT, oled
+        oled.fill_rect(0,16,  128,48,  0)
+        oled.text(f"Periodos: {str(self.NT)}", 0, 20, 1)
+        oled.text(f"Foi: {str((COUNT-1)//2)}", 0, 30, 1)
+        oled.text(f"Tempo: {time}",0,56, 1)        
+    
+    def on_current(self):
+        global LED, menu_data
+        LED.on()
+        self.NT = menu_data.get("mola_N", 1)
+        
+        
+        oled.fill(0)
+        oled.text("Mola", 5,0, 1)
+        self.show = make_task(show_display, self.display)
+        
+        self.start = make_task(crono, 0, self.NT * 2 +1)
+
         
 def pendulo():
     "Função para o pendulo"
     return wrap_object(Pendulo())
 
 def energy():
-    "Função para o pendulo"
+    "Função para o Energia Mecanica"
     return wrap_object(Energy())
+
+def mola():
+    "Função para o Energia Mecanica"
+    return wrap_object(Mola())
+
