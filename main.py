@@ -25,7 +25,7 @@ print(menu_data)
 BACK = ("Voltar", back)
 
 # Pendulo
-pend_config = get_integer(low_v=1, high_v=9, increment=1, caption="N° Periodos", field="pend_N")
+pend_config = get_integer(low_v=1, high_v=9, increment=1, caption="N Periodos", field="pend_N")
 pend_hist = hist(oled, "Pendulo", "Hist: Pendulo")
 
 ## menu Pendulo
@@ -33,7 +33,7 @@ pend_menu = wrap_menu("Pendulo", [("START", pendulo()), ("Config", pend_config),
 
 
 # Energia Mecanica
-energy_config = selection("cylinder", [("Solido", "sol"), ("2 * Interno", "2*I"), ("2 * Externo", "2*E"), ("int + Ext", "I+E")])
+energy_config = selection("cylinder", [("Solido", "sol"), ("2 * Interno", "2*I"), ("2 * Externo", "2*E"), ("int + Ext", "I+E")], "Tipos de medida")
 energy_hist = hist(oled, "Energy", "Hist: Energy")
 
 ## menu Energia Mecanica
@@ -41,7 +41,7 @@ energy_menu = wrap_menu("Energia Mecanica", [("START", energy()), ("Config", ene
 
 
 # Mola
-mola_config = get_integer(low_v=1, high_v=9, increment=1, caption="N° Periodos", field="mola_N")
+mola_config = get_integer(low_v=1, high_v=9, increment=1, caption="N Periodos", field="mola_N")
 mola_hist = hist(oled, "Mola", "Hist: Mola")
 
 ## menu Mola
@@ -69,3 +69,5 @@ main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mecanica",
 # Start
 main_menu()
 run_menu() 
+
+

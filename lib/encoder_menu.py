@@ -18,7 +18,7 @@ from rotary_irq_esp  import RotaryIRQ
 #import uasyncio as asyncio
 
 
-i2c = I2C(scl=SCL, sda=SDA, freq=100000)
+i2c = I2C(0, scl=SCL, sda=SDA, freq=100000)
 
 LED = Pin(32, Pin.OUT)
 LED.off()
@@ -296,7 +296,7 @@ class Hist():
 class Selection():
     
     "Return a string value from a menu like selection"
-    def __init__(self,field,choices):
+    def __init__(self,field,choices, title):
         global menu_data
        # print('selection field',field)
      #   print('menu data in init sel',menu_data)
@@ -306,6 +306,7 @@ class Selection():
             else:
                 return x
         self.field = field
+        self.title = title
         #If value is string convert to (string,string)
         self.choice =[str2tuple(x) for x in choices]
     #    print(self.choice)
@@ -324,9 +325,10 @@ class Selection():
     
 
     def on_scroll(self,val):
+        global oled
         self.index = val
-        display('',self.choice[self.index][0])
-        
+        display_ops(self.choice, self.index)
+        oled.show()
         
     def on_click(self):
         global menu_data
@@ -335,10 +337,12 @@ class Selection():
         back()
         
     def on_current(self):
+        global oled
         self.set_initial_value()
         set_encoder(self.index,0,len(self.choice)-1)
-        display('',self.choice[self.index][0])
-
+        display_title(self.title)
+        display_ops(self.choice, self.index)
+        oled.show()
 class Wizard():
     global stack
     """The wizard is a type of menu that  executes its own "leaves" in sequence"""
@@ -417,9 +421,9 @@ def hist(oled, field, title):
     "Wrap simple text output into menu"
     return wrap_object(Hist(oled, field, title))
 
-def selection(field,mylist):
+def selection(field, mylist, title):
     "Wrap a selection into menu"
-    return wrap_object(Selection(field,mylist))
+    return wrap_object(Selection(field, mylist, title))
 
 def get_integer(low_v=0,high_v=100,increment=10, caption='plain',field='datafield',default='DEF', save=False):
     "Wrap integer entry into menu"

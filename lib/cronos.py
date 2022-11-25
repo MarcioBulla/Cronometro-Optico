@@ -28,9 +28,7 @@ async def crono(inicio, N_mud):
         if state != IR.value():
             COUNT += 1
     END = ticks_ms()
-    print(f"START: {START}")
-    print(f"END: {END}")
-
+    
 async def show_display(display):
     global START, END, menu_data
     display(0)    
@@ -47,8 +45,8 @@ async def show_display(display):
 def convert(time):
     global menu_data
     bias = menu_data.get("bias")
-    print(f"bias: {bias}")
-    print(time)
+    # print(f"bias: {bias}")
+    # print(time)
     time += bias
     if time < 0:
         s = time//-1000
@@ -56,7 +54,7 @@ def convert(time):
     else:    
         s = time//1000
         ms = time%1000
-    print(s, ms)
+    # print(s, ms)
     return f"{s:>02}:{ms:>03}"
     
 class Pendulo():
@@ -94,7 +92,7 @@ class Pendulo():
         self.NT = menu_data.get("pend_N", 5)
         
         oled.fill(0)
-        oled.text("Pendulo", 5,0, 1)
+        display_title("Pendulo")
         self.show = make_task(show_display, self.display)
         self.start = make_task(crono, 0, self.NT*4+1)
         
@@ -138,10 +136,8 @@ class Energy():
         global LED, menu_data
         LED.on()
         self.cylinder = menu_data.get("cylinder", "sol")
+        display_title("Energia Mecanica")
         
-        
-        oled.fill(0)
-        oled.text("Energia Mecanica", 5,0, 1)
         self.show = make_task(show_display, self.display)
         
         if self.cylinder == "sol":
@@ -195,8 +191,7 @@ class Mola():
         self.NT = menu_data.get("mola_N", 1)
         
         
-        oled.fill(0)
-        oled.text("Mola", 5,0, 1)
+        display_title("Mola")
         self.show = make_task(show_display, self.display)
         
         self.start = make_task(crono, 0, self.NT * 2 +1)
