@@ -48,15 +48,15 @@ def convert(time):
     # print(f"bias: {bias}")
     # print(time)
     time += bias
-    if time < 0:
-        s = time//-1000
-        ms = time%-1000
-    else:    
-        s = time//1000
-        ms = time%1000
-    # print(s, ms)
-    return f"{s:>02}:{ms:>03}"
-    
+#     if time < 0:
+#         s = time//-1000
+#         ms = time%-1000
+#     else:    
+#         s = time//1000
+#         ms = time%1000
+     # print(s, ms)
+#     return f"{s:>02}:{ms:>03}"
+    return f"{time//1000:>02}:{time%1000:>03}"    
 class Pendulo():
     
     def __init__(self):
@@ -71,7 +71,7 @@ class Pendulo():
         stop(self.show)
         stop(self.start)
         if END != 0:
-            self.hist.append(f"P={self.NT:<1};T={convert(ticks_diff(END, START)):<4}")
+            self.hist.append(f"P={self.NT};T={convert(ticks_diff(END, START))}")
         print(self.hist)
         COUNT = 1
         START = 0
@@ -114,7 +114,7 @@ class Energy():
         stop(self.start)
         
         if END != 0:
-            self.hist.append(f"{self.cylinder:<3};T={convert(ticks_diff(END, START)):<4}")
+            self.hist.append(f"{self.cylinder:<3};T={convert(ticks_diff(END, START))}")
         print(self.hist)
         
         COUNT = 1
@@ -167,7 +167,7 @@ class Mola():
         stop(self.start)
         
         if END != 0:
-            self.hist.append(f"P={self.NT:<1};T={convert(ticks_diff(END, START)):<4}")
+            self.hist.append(f"P={self.NT:<1};T={convert(ticks_diff(END, START))}")
         print(self.hist)
         
         COUNT = 1
@@ -208,4 +208,5 @@ def energy():
 def mola():
     "Função para a mola"
     return wrap_object(Mola())
+
 
