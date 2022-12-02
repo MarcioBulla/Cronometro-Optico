@@ -12,5 +12,5 @@
 - `ssd1306.py`: https://github.com/stlehmann/micropython-ssd1306
 
 # Montagem
-[Lista e montagem](./photogate/Item_List.html)
+[Lista e montagem](http://htmlpreview.github.io/?https://github.com/MarcioBulla/Cronometro-Optico/blob/main/photogate/Item_List.html)
 
