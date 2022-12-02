@@ -1,0 +1,9 @@
+# files
+
+# types
+*.log
+*.ini
+*-bak
+
+# folder
+photogate/photogate-backups/

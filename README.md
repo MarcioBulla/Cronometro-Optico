@@ -12,5 +12,5 @@
 - `ssd1306.py`: https://github.com/stlehmann/micropython-ssd1306
 
 # Montagem
-![esquematico](./projeto/montagem.png)
+[Lista e montagem](./photogate/Item_List.html)
 
