@@ -121,7 +121,7 @@
     (property "Sheetname" "")
     (path "/63f1f18f-ec45-4294-bfb1-f0f704a6258f")
     (attr through_hole)
-    (fp_text reference "VR10k" (at 0 2.54) (layer "F.SilkS")
+    (fp_text reference "VR" (at 0 2.54) (layer "F.SilkS")
       (effects (font (size 1.002756 1.002756) (thickness 0.15)))
       (tstamp 7b5d920c-b016-44e0-bb64-a32207223c35)
     )
@@ -331,7 +331,7 @@
     (property "Sheetname" "")
     (path "/ff52656d-9062-4621-88b0-14400ecd07e5")
     (attr through_hole)
-    (fp_text reference "Green Led" (at 1.25 -3.683) (layer "F.SilkS")
+    (fp_text reference "Green Led" (at 1.25 -4.78) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp ab278fcd-cbb9-44a8-bfea-74e5a35f7413)
     )
@@ -458,7 +458,7 @@
     (property "Sheetname" "")
     (path "/52fccdab-71de-4b70-a7c9-485da3fafee0")
     (attr through_hole)
-    (fp_text reference "Display" (at 3.75 -3.683) (layer "F.SilkS")
+    (fp_text reference "Display" (at 3.75 -4.78) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp a52cf78f-9f87-44fb-8753-6c83e7513744)
     )
@@ -2851,7 +2851,7 @@
     (property "Sheetname" "")
     (path "/54b3576d-9fde-46e8-97ef-e9aae314452b")
     (attr through_hole)
-    (fp_text reference "Red Led" (at 1.25 -3.683) (layer "F.SilkS")
+    (fp_text reference "Red Led" (at 1.25 -4.78) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 222538a6-4050-46d5-98a8-56f54378d72c)
     )
@@ -2908,7 +2908,7 @@
     (property "Sheetname" "")
     (path "/5fb0064b-5d27-40c3-be50-cd9760b03f21")
     (attr through_hole)
-    (fp_text reference "Encoder" (at 5.842 -3.556) (layer "F.SilkS")
+    (fp_text reference "Encoder" (at 5.842 -4.78) (layer "F.SilkS")
       (effects (font (size 1 1) (thickness 0.15)))
       (tstamp 3c807a4e-5020-47b6-ac7d-a84e727344b4)
     )
@@ -4492,6 +4492,35 @@
     )
   )
 
+  (footprint "simbolos:P2_3poles" (layer "F.Cu")
+    (tedit 0) (tstamp edbdacf4-8d8e-4ac9-b84c-f3b4bc60f97b)
+    (at 111.5314 72.771)
+    (attr board_only exclude_from_pos_files exclude_from_bom)
+    (fp_text reference "P2 3poles" (at -0.2286 -4.3688) (layer "F.SilkS") hide
+      (effects (font (size 1.524 1.524) (thickness 0.3)))
+      (tstamp ccc388a4-1c3d-456b-91c7-bf4aa11dd82f)
+    )
+    (fp_text value "LOGO" (at 0.75 0) (layer "F.SilkS") hide
+      (effects (font (size 1.524 1.524) (thickness 0.3)))
+      (tstamp fcefed6e-68f8-4b77-b6cb-cd1405ab6149)
+    )
+    (fp_rect (start 3.6195 -1.4224) (end -0.1143 1.1684) (layer "F.SilkS") (width 0.2) (fill none) (tstamp 21145d2e-b921-48ea-a802-be164179adc1))
+    (fp_rect (start 9.2837 -1.8034) (end 3.5941 1.6256) (layer "F.SilkS") (width 0.2) (fill none) (tstamp df56e549-ccbc-4d12-b4d6-3435d622700c))
+    (fp_rect (start -0.1143 -1.4224) (end -3.8481 1.1684) (layer "F.SilkS") (width 0.2) (fill none) (tstamp e064414e-252a-403b-9c7c-2bb00155b9a1))
+    (fp_poly (pts
+        (xy -3.8481 1.1684)
+        (xy -5.1054 1.1684)
+        (xy -5.6134 0.6858)
+        (xy -7.6454 1.1684)
+        (xy -8.9408 0.4318)
+        (xy -8.9408 -0.635)
+        (xy -7.6454 -1.3716)
+        (xy -5.588 -0.889)
+        (xy -5.1054 -1.4224)
+        (xy -3.8481 -1.4224)
+      ) (layer "F.SilkS") (width 0.2) (fill none) (tstamp 23bd01ce-478d-412b-a45e-e47a1f28b3ce))
+  )
+
   (footprint "MountingHole:MountingHole_2.2mm_M2" (layer "F.Cu")
     (tedit 56D1B4CB) (tstamp f58cd76c-74c0-485c-aed1-2bfa9eb2edf0)
     (at 108.712 69.85)
@@ -4540,6 +4569,63 @@
   )
 
   (gr_rect (start 102.108 64.77) (end 174.879 126.873) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 35fa4871-b5eb-4607-86e7-8b03f8829853))
+  (gr_text "Feito por: \nMarcio Ap. Bulla Jr.\n\nCódigo Fonte: \ngithub.com/MarcioBulla/Cronometro-Optico\n" (at 139.7 74.93 90) (layer "B.SilkS") (tstamp 97110c1a-e389-439e-9fd5-0cb157c200f4)
+    (effects (font (size 1.5 1.5) (thickness 0.3) italic) (justify left mirror))
+  )
+  (gr_text "GND" (at 171.6275 70.485) (layer "F.SilkS") (tstamp 13fc947e-c316-4848-8638-bac898e642de)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "Versão: 1.0" (at 124.46 99.695 90) (layer "F.SilkS") (tstamp 18c77081-277f-43b1-8257-f5b697a7d807)
+    (effects (font (size 2 2) (thickness 0.3)))
+  )
+  (gr_text "P2 \nEsterio" (at 117.8814 72.644) (layer "F.SilkS") (tstamp 1e3e007f-6e91-4eac-821e-04406401d5b4)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "T led" (at 109.6264 72.644) (layer "F.SilkS") (tstamp 2324194c-9491-4113-bdc3-5d6b9cea09f0)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "POS" (at 152.754332 70.485) (layer "F.SilkS") (tstamp 3523918a-ab11-4ed7-8bfe-014389521ac7)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "GND" (at 143.881166 70.485) (layer "F.SilkS") (tstamp 3a3f8cd4-b998-4c36-93ac-97b4b81c623a)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "POS" (at 141.381166 70.485) (layer "F.SilkS") (tstamp 55a3305e-77ba-45ce-9ab3-ab4fb7292ef2)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "GND" (at 155.254332 70.485) (layer "F.SilkS") (tstamp 5b56577f-ab79-4da6-86ad-11d73eb0c53c)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "DT" (at 125.008 70.485) (layer "F.SilkS") (tstamp 60686e62-2de6-4653-9a56-94bacd486c95)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "VCC" (at 169.1275 70.485) (layer "F.SilkS") (tstamp 7242458e-de4a-4703-9f65-eb4e4e3b1860)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "R led" (at 105.1814 72.644) (layer "F.SilkS") (tstamp 9e019146-71aa-48b1-920d-16ca451ee684)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "VCC" (at 130.008 70.485) (layer "F.SilkS") (tstamp b1ced882-fd8e-4f1e-a533-caa6ceff2d6a)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "GND" (at 113.4364 72.6821) (layer "F.SilkS") (tstamp b39ca0d6-ecda-452c-915c-0ad1c646fd95)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "SDA" (at 166.6275 70.485) (layer "F.SilkS") (tstamp cc5583d6-f71c-4920-8980-bce7901e3439)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "CLK" (at 122.508 70.485) (layer "F.SilkS") (tstamp d8137dce-209a-4ccb-b9c4-d8d2456a525f)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "SCL" (at 164.1275 70.485) (layer "F.SilkS") (tstamp e4eba0cb-6e45-4692-80f7-56110b8d29d2)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "SW\n" (at 127.508 70.485) (layer "F.SilkS") (tstamp ed2d5fe5-15c4-4e22-92c7-83d4f906b399)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
+  (gr_text "GND" (at 132.508 70.485) (layer "F.SilkS") (tstamp fdc48a40-3465-40b7-a476-c76bdefed65d)
+    (effects (font (size 0.75 0.75) (thickness 0.15)))
+  )
 
   (segment (start 130.002 67.61) (end 120.269 77.343) (width 0.25) (layer "F.Cu") (net 1) (tstamp 0e32061e-0618-4ef1-aa1a-8ed4bfb8c4ec))
   (segment (start 169.1275 67.61) (end 167.8025 66.285) (width 0.25) (layer "F.Cu") (net 1) (tstamp 142e369a-1bac-4d02-a66d-690628a58f46))
@@ -4619,6 +4705,45 @@
       80763d8f-c4f6-4bc2-9633-abd5a2109e17
       8d59341b-cc34-4cd2-b2fa-e3f1940fb7c6
       cf235b1a-3e32-4859-875c-61ee6e39efee
+      dfcf44aa-b0a3-4d3f-b1e2-528db8c8e6b3
+    )
+  )
+  (group "" (id 776ef48e-87f1-479e-92c7-d3cd67a12d6d)
+    (members
+      1e3e007f-6e91-4eac-821e-04406401d5b4
+      2324194c-9491-4113-bdc3-5d6b9cea09f0
+      9e019146-71aa-48b1-920d-16ca451ee684
+      b39ca0d6-ecda-452c-915c-0ad1c646fd95
+      edbdacf4-8d8e-4ac9-b84c-f3b4bc60f97b
+    )
+  )
+  (group "" (id 79ff3c98-da62-4fd9-8315-a621f1adddae)
+    (members
+      13fc947e-c316-4848-8638-bac898e642de
+      7242458e-de4a-4703-9f65-eb4e4e3b1860
+      cc5583d6-f71c-4920-8980-bce7901e3439
+      e4eba0cb-6e45-4692-80f7-56110b8d29d2
+    )
+  )
+  (group "" (id 9809aebd-4437-43bd-bc12-84fe6c48282c)
+    (members
+      3523918a-ab11-4ed7-8bfe-014389521ac7
+      5b56577f-ab79-4da6-86ad-11d73eb0c53c
+    )
+  )
+  (group "" (id b3502b2a-9526-4acc-a90d-83b2a38c23b8)
+    (members
+      60686e62-2de6-4653-9a56-94bacd486c95
+      b1ced882-fd8e-4f1e-a533-caa6ceff2d6a
+      d8137dce-209a-4ccb-b9c4-d8d2456a525f
+      ed2d5fe5-15c4-4e22-92c7-83d4f906b399
+      fdc48a40-3465-40b7-a476-c76bdefed65d
+    )
+  )
+  (group "" (id bf4e867e-2f05-4454-be63-b109659adc37)
+    (members
+      3a3f8cd4-b998-4c36-93ac-97b4b81c623a
+      55a3305e-77ba-45ce-9ab3-ab4fb7292ef2
     )
   )
 )
