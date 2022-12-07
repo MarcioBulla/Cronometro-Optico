@@ -1,7 +1,8 @@
-from machine import Pin, I2C
+from machine import Pin, SoftI2C
 import sys
 from json import dump, load
-from ssd1306 import SSD1306_I2C
+from lcd_api import LcdApi
+from i2c_lcd import I2cLcd
 import uasyncio as asyncio
 
 # I2C Display
@@ -18,12 +19,12 @@ from rotary_irq_esp  import RotaryIRQ
 #import uasyncio as asyncio
 
 
-i2c = I2C(0, scl=SCL, sda=SDA, freq=100000)
+i2c = SoftI2C(scl=SCL, sda=SDA, freq=100000)
 
 LED = Pin(32, Pin.OUT)
 LED.off()
 
-oled = SSD1306_I2C(128, 64, i2c)
+lcd = I2cLcd(i2c, 0x27, 4, 20)
 
 encoder = RotaryIRQ(pin_num_clk=CLK, 
               pin_num_dt=DT, 
@@ -45,26 +46,49 @@ encoder = RotaryIRQ(pin_num_clk=CLK,
 # 5. Set a flashing led as a heart beat for main loop (optional)
 # If you get these functions to work there should be no hardware
 
-def display(text1,text2):
-    oled.fill(0)
-    oled.text(text1,0,0)
-    oled.text(text2,0,30)
-    oled.show() 
+#Custom Chars
+hourglass_down = bytearray([0x1F, 0x11, 0x0A, 0x04, 0x04, 0x0E, 0x1F, 0x1F])
+hourglass_up = bytearray([0x1F, 0x1F, 0x0E, 0x04, 0x04, 0x0A, 0x11, 0x1F])
+number_symbol = bytearray([0x0C, 0x12, 0x12, 0x0C, 0x00, 0x1E, 0x00, 0x00])
+arrow_right = bytearray([0x00, 0x04, 0x06, 0x1F, 0x1F, 0x06, 0x04, 0x00])
+arrow_left = bytearray([0x00, 0x04, 0x0C, 0x1F, 0x1F, 0x0C, 0x04, 0x00])
+char_e = bytearray([0x00, 0x00, 0x00, 0x0C, 0x12, 0x1C, 0x10, 0x0E])
+char_i = bytearray([0x00, 0x00, 0x00, 0x08, 0x18, 0x08, 0x08, 0x0C])
+
+                
+lcd.custom_char(0, number_symbol)
+lcd.custom_char(1, arrow_right)
+lcd.custom_char(2, arrow_left)
+lcd.custom_char(3, char_e)
+lcd.custom_char(4, char_i)
+
+
+def display(text):
+    lcd.move_to(3,0)
+    lcd.putstr(text)
+     
 
 def display_ops(menu, value):
-    global oled
-    oled.fill_rect(0,16,  128,48,  0)
-    oled.text(menu[value-1][0] , 0, 21, 1)
-    oled.fill_rect(0,32,  128,16,  1)
-    oled.text(menu[value][0] , 0, 37, 0)
-    oled.text(menu[value - len(menu)+1][0] , 0, 53, 1)
-
-def display_title(title):
-    oled.fill_rect(0,0, 128,16, 0)
-    oled.text(title, 0, 5, 1)
-    
+    global lcd
+    lcd.move_to(0, 1)
+    lcd.putstr(f"{menu[value-1][0]:<20}")
+    lcd.move_to(0, 2)
+    lcd.putstr(f"{chr(1)} {menu[value][0]} {chr(2)}")
+    lcd.putstr((16 - len(menu[value][0]))*" ")
+    lcd.move_to(0, 3)
+    lcd.putstr(f"{menu[value - len(menu)+1][0]:<20}")
 
 
+def display_hist(menu, value):
+    global lcd
+    lcd.move_to(0, 1)
+    lcd.putstr(f"{menu[value-1]:<20}")
+    lcd.move_to(0, 2)
+    lcd.putstr(f"{menu[value]:<20}")
+    lcd.move_to(0, 3)
+    lcd.putstr(f"{menu[value - len(menu)+1]:<20}")
+
+# Encoder Functions
 def value():
     return encoder._value
 
@@ -195,7 +219,7 @@ class Menu():
         self.index = value
         # print(self.index)
         display_ops(self.menu, self.index)
-        oled.show()
+        
         
     def on_click(self):
         "Execute the menu item's function"
@@ -204,9 +228,10 @@ class Menu():
     def on_current(self):
         "Set (and fix if necessary) the index"           
         set_encoder(self.index,0,len(self.menu)-1)
-        display_title(self.title)
+        lcd.clear()
+        lcd.putstr(f"{self.title:^20}")
         display_ops(self.menu, self.index)
-        oled.show()
+        
         
         
 class GetInteger():
@@ -237,10 +262,12 @@ class GetInteger():
         
       
     def on_scroll(self,val):
+        global lcd
         "Change the value displayed as we scroll"
         #print(val)
         self.value = val
-        display(self.caption,str(self.value))
+        lcd.move_to(0,2)
+        lcd.putstr(f"{self.value:<20}")
             
     def on_click(self):
         global menu_data
@@ -256,24 +283,28 @@ class GetInteger():
         
     def on_current(self):
         "Make sure encode is set properly, set up data and display"
+        global lcd
         self.get_initial_value()
         # print('get_int',menu_data,self.value,encoder.value())
         set_encoder(self.value,self.low_v,self.high_v + self.increment - 1, self.increment)
-        display(self.caption,str(self.value))
+        lcd.clear()
+        lcd.putstr(f"{self.caption:^20}")
+        lcd.move_to(0,2)
+        lcd.putstr(f"{self.value:<20}")
         
 
 class Hist():
-    "Show some information on the display.  "
-    def __init__(self,oled, field, title):
+    "Display measurement history."
+    def __init__(self,lcd, field, title):
         self.index = 0
-        self.oled = oled
+        self.lcd = lcd
         self.field = field
         self.title = title
         
     def on_scroll(self,val):
         self.index = val
-        display_ops(self.text, self.index)
-        oled.show()
+        display_hist(self.text, self.index)
+        
         
     def on_click(self):
         back()
@@ -281,17 +312,16 @@ class Hist():
     def mount_hist(self):
         global menu_data
         self.hist = menu_data.get(self.field)
-        self.text = [(f"{num:>02};{i}","") for num, i in enumerate(self.hist if self.hist else 100*["SEM LEITURAS"])]
-        print(self.text)
+        self.text = [f"{num:>02}; {i}" for num, i in enumerate(self.hist if self.hist else 100*["!!SEM LEITURAS!!"])]
         # print(self.text[self.index -1][0])
     
     
     def on_current(self):
         self.mount_hist()
         set_encoder(self.index,0,len(self.text)-1)
-        display_title(self.title)
-        display_ops(self.text, self.index)
-        oled.show()
+        
+        display_hist(self.text, self.index)
+        
         
 class Selection():
     
@@ -325,10 +355,10 @@ class Selection():
     
 
     def on_scroll(self,val):
-        global oled
+        global lcd
         self.index = val
         display_ops(self.choice, self.index)
-        oled.show()
+        
         
     def on_click(self):
         global menu_data
@@ -337,12 +367,13 @@ class Selection():
         back()
         
     def on_current(self):
-        global oled
+        global lcd
         self.set_initial_value()
         set_encoder(self.index,0,len(self.choice)-1)
-        display_title(self.title)
+        lcd.clear()
+        lcd.putstr(f"{self.title:^20}")
         display_ops(self.choice, self.index)
-        oled.show()
+        
 class Wizard():
     global stack
     """The wizard is a type of menu that  executes its own "leaves" in sequence"""
@@ -398,10 +429,12 @@ class Info():
         back()
         
     def on_current(self):
-        oled.fill(0)
+        global lcd
+        lcd.clear()
         for i,a in enumerate(self.message.split('\n')):
-            oled.text(a,0,i*12)
-        oled.show()
+            lcd.move_to(0,i)
+            lcd.putstr(a)
+        
 
 #===================================
 # Functions for defining menus
@@ -417,9 +450,9 @@ def wrap_menu(title, mymenulist):
     "wrap a list into a function so it can be set from within the menu"
     return wrap_object(Menu(title, mymenulist))
 
-def hist(oled, field, title):
+def hist(lcd, field, title):
     "Wrap simple text output into menu"
-    return wrap_object(Hist(oled, field, title))
+    return wrap_object(Hist(lcd, field, title))
 
 def selection(field, mylist, title):
     "Wrap a selection into menu"

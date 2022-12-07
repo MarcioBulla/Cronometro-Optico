@@ -25,38 +25,37 @@ print(menu_data)
 BACK = ("Voltar", back)
 
 # Pendulo
-pend_config = get_integer(low_v=1, high_v=9, increment=1, caption="N Periodos", field="pend_N")
-pend_hist = hist(oled, "Pendulo", "Hist: Pendulo")
+pend_config = get_integer(low_v=1, high_v=9, increment=1, caption="N"+chr(0)+" Periodos", field="pend_N")
+pend_hist = hist(lcd, "Pendulo", "Hist: Pendulo")
 
 ## menu Pendulo
 pend_menu = wrap_menu("Pendulo", [("START", pendulo()), ("Config", pend_config), ("Historico", pend_hist), BACK])
 
 
 # Energia Mecanica
-energy_config = selection("cylinder", [("Solido", "sol"), ("2 * Interno", "2*I"), ("2 * Externo", "2*E"), ("int + Ext", "I+E")], "Tipos de medida")
-energy_hist = hist(oled, "Energy", "Hist: Energy")
+energy_config = selection("cylinder", ["Solido", "2R"+chr(4), "2R"+chr(3), "R"+chr(4)+"+"+"R"+chr(3)], "Tipos de medida")
+energy_hist = hist(lcd, "Energy", "Hist: Energy")
 
 ## menu Energia Mecanica
 energy_menu = wrap_menu("Energia Mecanica", [("START", energy()), ("Config", energy_config), ("Historico", energy_hist), BACK])
 
 
 # Mola
-mola_config = get_integer(low_v=1, high_v=9, increment=1, caption="N Periodos", field="mola_N")
-mola_hist = hist(oled, "Mola", "Hist: Mola")
+mola_config = get_integer(low_v=1, high_v=9, increment=1, caption="N"+chr(0)+" Periodos", field="mola_N")
+mola_hist = hist(lcd, "Mola", "Hist: Mola")
 
 ## menu Mola
 mola_menu = wrap_menu("Mola", [("START", mola()), ("Config", mola_config), ("Historico", mola_hist), BACK])
 
 
 # Calibragem
-bias_centena = get_integer(low_v=-1000, high_v=0, increment=100, caption="Bias Centena (ms)", field="bias", save=True)
-bias_dezena = get_integer(low_v=-1000, high_v=0, increment=10, caption="Bias Dezena (ms)", field="bias", save=True)
-bias_unidade = get_integer(low_v=-1000, high_v=0, increment=1, caption="Bias Unidade (ms)", field="bias", save=True)
-bias = wizard([("Bias Centena",bias_centena),("Bias Dezena",bias_dezena),("Bias Unidade (ms)",bias_unidade)])
+bias_dezena = get_integer(low_v=-100, high_v=100, increment=10, caption="Bias Dezena (ms)", field="bias", save=True)
+bias_unidade = get_integer(low_v=-100, high_v=100, increment=1, caption="Bias Unidade (ms)", field="bias", save=True)
+bias = wizard([("Bias Dezena",bias_dezena),("Bias Unidade (ms)",bias_unidade)])
 
 
 # Criadores
-criadores = info("Orientador:\n  Fabiano\nDevOps:\n  Marcio Bulla\n  Jessica Lo")
+criadores = info("Criado por:\n  Fabiano Yokaichiya\n  Marcio Bulla\n  Jessica Lo")
 
 
 ## menu Calibragem
