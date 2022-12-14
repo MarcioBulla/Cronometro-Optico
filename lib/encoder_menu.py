@@ -1,31 +1,29 @@
 from machine import Pin, SoftI2C
+from math import ceil
 import sys
 from json import dump, load
 from lcd_api import LcdApi
 from i2c_lcd import I2cLcd
+from rotary_irq_esp  import RotaryIRQ
 import uasyncio as asyncio
 
-# I2C Display
+# Pinos I2C Display
 SDA, SCL = Pin(21), Pin(22)
 
-# Encoder
+# Pinos Encoder
 CLK, DT, button = 35, 34, Pin(39, Pin.IN)
 
-#from guimenu importMenu
-#import _thread
-
-#This section may need to be modified to suit your hardware
-from rotary_irq_esp  import RotaryIRQ
-#import uasyncio as asyncio
-
-
+# Set I2C
 i2c = SoftI2C(scl=SCL, sda=SDA, freq=100000)
 
+# Set Led Verde
 LED = Pin(32, Pin.OUT)
 LED.off()
 
+# Set lcd
 lcd = I2cLcd(i2c, 0x27, 4, 20)
 
+# set Encoder
 encoder = RotaryIRQ(pin_num_clk=CLK, 
               pin_num_dt=DT, 
               min_val=0, 
@@ -36,17 +34,8 @@ encoder = RotaryIRQ(pin_num_clk=CLK,
 
 
 
-#!!!!!!!!!----------------
 
-# There are 5 hardware functions
-# 1. Display text
-# 2. Read button or switch for click_event
-# 3. Read value from encoder for scroll event
-# 4. Setup the encoder, so that encoder values are sensible
-# 5. Set a flashing led as a heart beat for main loop (optional)
-# If you get these functions to work there should be no hardware
-
-#Custom Chars
+# Custom Chars
 hourglass_down = bytearray([0x1F, 0x11, 0x0A, 0x04, 0x04, 0x0E, 0x1F, 0x1F])
 hourglass_up = bytearray([0x1F, 0x1F, 0x0E, 0x04, 0x04, 0x0A, 0x11, 0x1F])
 number_symbol = bytearray([0x0C, 0x12, 0x12, 0x0C, 0x00, 0x1E, 0x00, 0x00])
@@ -62,33 +51,33 @@ lcd.custom_char(2, arrow_left)
 lcd.custom_char(3, char_e)
 lcd.custom_char(4, char_i)
 
-
-def display(text):
-    lcd.move_to(3,0)
-    lcd.putstr(text)
-     
-
+# Show Display de opções
 def display_ops(menu, value):
     global lcd
+    ops1 = menu[value-1][0]
+    ops2 = chr(1) + " " + menu[value][0] + " " + chr(2)
+    ops3 = menu[value - len(menu)+1][0]
     lcd.move_to(0, 1)
-    lcd.putstr(f"{menu[value-1][0]:<20}")
+    lcd.putstr(f"{ops1:<20}")
     lcd.move_to(0, 2)
-    lcd.putstr(f"{chr(1)} {menu[value][0]} {chr(2)}")
-    lcd.putstr((16 - len(menu[value][0]))*" ")
+    lcd.putstr(f"{ops2:<20}")
     lcd.move_to(0, 3)
-    lcd.putstr(f"{menu[value - len(menu)+1][0]:<20}")
+    lcd.putstr(f"{ops3:<20}")
 
-
+# Show Display para historico
 def display_hist(menu, value):
     global lcd
+    ops1 = menu[value-1]
+    ops2 = menu[value]
+    ops3 = menu[value - len(menu)+1]
     lcd.move_to(0, 1)
-    lcd.putstr(f"{menu[value-1]:<20}")
+    lcd.putstr(f"{ops1:<20}")
     lcd.move_to(0, 2)
-    lcd.putstr(f"{menu[value]:<20}")
+    lcd.putstr(f"{ops2:<20}")
     lcd.move_to(0, 3)
-    lcd.putstr(f"{menu[value - len(menu)+1]:<20}")
+    lcd.putstr(f"{ops3:<20}")
 
-# Encoder Functions
+# Funções para Encoder
 def value():
     return encoder._value
 
@@ -103,13 +92,13 @@ menu_data = {} # For getting data out of the menu
 task = None   # This holds a task for asyncio
 
 
-#Little utility function to avoid some module definitions
+# Little utility function to avoid some module definitions
 def set_data(key,value):
     global menu_data
     menu_data[key]=value
 #    print ('setting',menu_data)
 
-#This is taken from Peter Hinch's tutorial
+# This is taken from Peter Hinch's tutorial
 def set_global_exception():
     def handle_exception(loop, context):
         import sys
@@ -120,17 +109,14 @@ def set_global_exception():
 
 
 #============================
-#loop related
+# loop related
     
     
 def mainloop():
     "An asynchronous main loop"
     set_global_exception()
-    #global led
-
     while True:
-       # led(not led())
-        await step()
+       await step()
         
 def run_async(func):
     "run a function asynchronously"
@@ -144,7 +130,7 @@ def run_menu():
     run_async(mainloop)
     
 
-old_v = -1 #inital scroll values so first usage forces an event
+old_v = -1 # inital scroll values so first usage forces an event
 old_switch = button() # same for button
 
 async def step():
@@ -166,7 +152,7 @@ async def step():
     await asyncio.sleep(0)  #play nicely with others
     
 #===============================
-#Menu navigation related
+# Menu navigation related
 
 def back():
     "go back up then menu by excuting this function"
@@ -204,10 +190,10 @@ def make_task(func, *args):
 
 
 #=============================
-#Object definitions for control objects
+# Object definitions for control objects
   
 class Menu():
-    "Show a menu on a tiny dispaly by turning a rotatry encoder"
+    "Show a menu on a tiny display by turning a rotatry encoder"
     def __init__(self,title, menu):
         self.menu = menu
         self.title = title
@@ -267,7 +253,7 @@ class GetInteger():
         #print(val)
         self.value = val
         lcd.move_to(0,2)
-        lcd.putstr(f"{self.value:<20}")
+        lcd.putstr(f"{self.value:^20}")
             
     def on_click(self):
         global menu_data
@@ -290,7 +276,7 @@ class GetInteger():
         lcd.clear()
         lcd.putstr(f"{self.caption:^20}")
         lcd.move_to(0,2)
-        lcd.putstr(f"{self.value:<20}")
+        lcd.putstr(f"{self.value:^20}")
         
 
 class Hist():
@@ -420,21 +406,24 @@ class Wizard():
 class Info():
     "Show some information on the display.  "
     def __init__(self,message):
-        self.message = message
+        self.message = message.split('\n')
+        self.index = 0
         
     def on_scroll(self,val):
-        pass
+        self.index = val
+        lcd.clear()
+        for i,a in enumerate(self.message[(self.index)*4:(self.index+1)*4]):
+            lcd.move_to(0,i)
+            lcd.putstr(a)
+            
         
     def on_click(self):
         back()
         
     def on_current(self):
         global lcd
-        lcd.clear()
-        for i,a in enumerate(self.message.split('\n')):
-            lcd.move_to(0,i)
-            lcd.putstr(a)
-        
+        set_encoder(self.index,0,ceil(len(self.message)))
+
 
 #===================================
 # Functions for defining menus
@@ -473,4 +462,3 @@ def info(string):
 def dummy():
     "Just a valid dummy function to fill menu actions while we are developing"
     pass   
-

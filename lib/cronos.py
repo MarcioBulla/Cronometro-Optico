@@ -5,15 +5,18 @@ from machine import Pin
 # Sensor IR
 IR = Pin(36, Pin.IN)
 
-COUNT = 1
-N_mud = 0
+# variaveis globais
+COUNT = 0
 START = 0
 END = 0
 
 
 async def crono(inicio, N_mud):
+    """
+    Contador de mudanças de estados
+    """
     global COUNT, START, END, IR
-    COUNT = 1
+    COUNT = 0
     START = 0
     END = 0
     while True:
@@ -27,81 +30,98 @@ async def crono(inicio, N_mud):
         await asyncio.sleep_ms(0)
         if state != IR.value():
             COUNT += 1
+            print(COUNT)
     END = ticks_ms()
-    
+
+
 async def show_display(display):
-    global START, END, menu_data
-    display(0)    
+    """
+    Atualizador do display
+    """
+    global START, END, menu_data, LED, lcd
+    LED.on()
+    lcd.move_to(0,3)
+    lcd.putstr(f"{"Aguarde":^20}")
     while not START:
-        await asyncio.sleep(1/60)
+        await asyncio.sleep(1/24)
     while not END:
         display(convert(ticks_diff(ticks_ms(), START)))    
-        await asyncio.sleep(1/60)
+        await asyncio.sleep(1/24)
     display(convert(ticks_diff(END, START)))
+    lcd.move_to(0,3)
+    lcd.putstr(f"{"!!Concluido!!":^20}")
+    while True:
+        LED(not LED())
+        await asyncio.sleep(1/4)
+
 
 def convert(time):
+    """
+    Conversor de tempo em string
+    """
     global menu_data
     bias = menu_data.get("bias")
-    # print(f"bias: {bias}")
-    # print(time)
     time += bias
-#     if time < 0:
-#         s = time//-1000
-#         ms = time%-1000
-#     else:    
-#         s = time//1000
-#         ms = time%1000
-     # print(s, ms)
-#     return f"{s:>02}:{ms:>03}"
     return f"{time//1000:>02}:{time%1000:>03}"
 
 
+# Classes de Experimentos
 class Pendulo():
-    
+    """
+    Classe para experimento pendulo
+    """
     def __init__(self):
         global menu_data
         self.hist = menu_data.get("Pendulo")
 
+
     def on_scroll(self,val):
         pass
-        
+
+
     def on_click(self):
         global COUNT, START, END, LED
         stop(self.show)
         stop(self.start)
-        if END != 0:
+        if END:
             self.hist.append(f"P={self.NT}; T={convert(ticks_diff(END, START))}")
-        print(self.hist)
-        COUNT = 1
+        # print(self.hist)
+        COUNT = 0
         START = 0
         END = 0
         LED.off()
         back()
     
+    
     def display(self, time):
         global COUNT, lcd
-        lcd.move_to(8, 1)
-        lcd.putstr(f"{str(COUNT//4)}")
-        lcd.move_to(0, 2)
-        lcd.putstr(f"Tempo: {time}")
-           
+        lcd.move_to(9, 1)
+        lcd.putstr(str(COUNT//4))
+        lcd.move_to(7, 2)
+        lcd.putstr(time)
+    
+    
     def on_current(self):
-        global LED, menu_data, lcd
-        LED.on()
+        global menu_data, lcd
         self.NT = menu_data.get("pend_N", 5)
         lcd.clear()
         lcd.putstr(f"{"Pendulo":^20}")
         lcd.move_to(0,1)
-        lcd.putstr(f"Periodo: /{self.NT}")
+        lcd.putstr(f"Periodo: 0/{self.NT}")
+        lcd.move_to(0,2)
+        lcd.putstr("Tempo: ")
         self.show = make_task(show_display, self.display)
-        self.start = make_task(crono, 0, self.NT*4+1)
+        self.start = make_task(crono, 1, self.NT*4)
         
     
 class Energy():
-    
+    """
+    Classe para experimento de Energia Mecanica
+    """
     def __init__(self):
         global menu_data
         self.hist = menu_data.get("Energy")
+    
     
     def on_scroll(self, val):
         pass
@@ -117,7 +137,7 @@ class Energy():
             self.hist.append(f"{self.cylinder:>6}; T={convert(ticks_diff(END, START))}")
         print(self.hist)
         
-        COUNT = 1
+        COUNT = 0
         START = 0
         END = 0
         
@@ -127,33 +147,36 @@ class Energy():
     
     def display(self, time):
         global COUNT, lcd
-        lcd.move_to(0, 2)
-        lcd.putstr(f"Tempo: {time}")
+        lcd.move_to(7, 2)
+        lcd.putstr(time)
         
     
     def on_current(self):
-        global LED, menu_data, lcd
-        LED.on()
+        global menu_data, lcd
         
         self.cylinder = menu_data.get("cylinder", "Solido")
         lcd.clear()
         lcd.putstr(f"{"Energia Mecanica":^20}")
-        lcd.move_to(0, 1)
+        lcd.move_to(0,1)
         lcd.putstr(f"cilindro: {self.cylinder}")
+        lcd.move_to(0,2)
+        lcd.putstr("Tempo: ")
         
         self.show = make_task(show_display, self.display)
         
         if self.cylinder == "Solido":
-            self.start = make_task(crono, 1, 2)
+            self.start = make_task(crono, 0, 1)
         elif self.cylinder == "2R"+chr(4):
-            self.start = make_task(crono, 0, 2)
+            self.start = make_task(crono, 1, 1)
         elif self.cylinder == "2R"+chr(3):
-            self.start = make_task(crono, 1, 4)
+            self.start = make_task(crono, 0, 3)
         else:
-            self.start = make_task(crono, 1, 3)
+            self.start = make_task(crono, 0, 2)
 
 class Mola():
-    
+    """
+    Classe para experimento de mola
+    """
     def __init__(self):
         global menu_data
         self.hist = menu_data.get("Mola")
@@ -173,7 +196,7 @@ class Mola():
             self.hist.append(f"P={self.NT}; T={convert(ticks_diff(END, START))}")
         print(self.hist)
         
-        COUNT = 1
+        COUNT = 0
         START = 0
         END = 0
         
@@ -183,26 +206,28 @@ class Mola():
     
     def display(self, time):
         global COUNT, lcd
-        lcd.move_to(8, 1)
-        lcd.putstr(f"{str((COUNT-1)//2)}")
-        lcd.move_to(0, 2)
-        lcd.putstr(f"Tempo: {time}")      
+        lcd.move_to(9, 1)
+        lcd.putstr(str((COUNT)//2))
+        lcd.move_to(7, 2)
+        lcd.putstr(time)      
+    
     
     def on_current(self):
-        global LED, menu_data
-        LED.on()
+        global menu_data
         self.NT = menu_data.get("mola_N", 1)
-        
         
         lcd.clear()
         lcd.putstr(f"{"Mola":^20}")
         lcd.move_to(0,1)
-        lcd.putstr(f"Periodo: /{self.NT}")
+        lcd.putstr(f"Periodo: 0/{self.NT}")
+        lcd.move_to(0,2)
+        lcd.putstr("Tempo: ")
         self.show = make_task(show_display, self.display)
         
-        self.start = make_task(crono, 0, self.NT * 2 +1)
+        self.start = make_task(crono, 1, self.NT * 2)
 
-        
+ 
+# Definições para usar as funções
 def pendulo():
     "Função para o pendulo"
     return wrap_object(Pendulo())
@@ -214,4 +239,3 @@ def energy():
 def mola():
     "Função para a mola"
     return wrap_object(Mola())
-

@@ -55,7 +55,7 @@ bias = wizard([("Bias Dezena",bias_dezena),("Bias Unidade (ms)",bias_unidade)])
 
 
 # Criadores
-criadores = info("Criado por:\n  Fabiano Yokaichiya\n  Marcio Bulla\n  Jessica Lo")
+criadores = info("Criado por:\n  Fabiano Yokaichiya\n  Marcio Bulla\n  Jessica Lo\nEm homenagem a um\ngrande amigo\n   Alisson Britto   \ndescanse em paz.")
 
 
 ## menu Calibragem
@@ -68,5 +68,3 @@ main_menu = wrap_menu("Main Menu", [("Pendulo", pend_menu), ("Energia Mecanica",
 # Start
 main_menu()
 run_menu() 
-
-
