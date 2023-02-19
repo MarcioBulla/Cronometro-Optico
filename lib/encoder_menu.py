@@ -408,6 +408,7 @@ class Info():
     def __init__(self,message):
         self.message = message.split('\n')
         self.index = 0
+        print(len(self.message))
         
     def on_scroll(self,val):
         self.index = val
@@ -416,13 +417,14 @@ class Info():
             lcd.move_to(0,i)
             lcd.putstr(a)
             
+            
         
     def on_click(self):
         back()
         
     def on_current(self):
         global lcd
-        set_encoder(self.index,0,ceil(len(self.message)))
+        set_encoder(self.index,0,ceil(len(self.message)/4)-1)
 
 
 #===================================

@@ -43,16 +43,16 @@ async def show_display(display):
     lcd.move_to(0,3)
     lcd.putstr(f"{"Aguarde":^20}")
     while not START:
-        await asyncio.sleep(1/24)
+        await asyncio.sleep_ms(600)
     while not END:
         display(convert(ticks_diff(ticks_ms(), START)))    
-        await asyncio.sleep(1/24)
+        await asyncio.sleep_ms(600)
     display(convert(ticks_diff(END, START)))
     lcd.move_to(0,3)
     lcd.putstr(f"{"!!Concluido!!":^20}")
     while True:
         LED(not LED())
-        await asyncio.sleep(1/4)
+        await asyncio.sleep_ms(250)
 
 
 def convert(time):

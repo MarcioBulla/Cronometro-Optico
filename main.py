@@ -55,7 +55,7 @@ bias = wizard([("Bias Dezena",bias_dezena),("Bias Unidade (ms)",bias_unidade)])
 
 
 # Criadores
-criadores = info("Criado por:\n  Fabiano Yokaichiya\n  Marcio Bulla\n\nEm homenagem a um\ngrande amigo\n   Alisson Britto   \ndescanse em paz.")
+criadores = info("Criado por:\n  Fabiano Yokaichiya\n  Marcio Bulla\n \nEm homenagem a um\ngrande amigo\n   Alisson Britto   \ndescanse em paz.")
 
 
 ## menu Calibragem
