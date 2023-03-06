@@ -1,0 +1,10 @@
+cff-version: 0.0.1
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Marcio"
+  given-names: "Bulla"
+  orcid: " http://lattes.cnpq.br/7659916731333647"
+title: "Cronometro-Optico"
+version: 0.0.1
+date-released: 2023-03-06
+url: "https://github.com/MarcioBulla/Cronometro-Optico"
