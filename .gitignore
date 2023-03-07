@@ -1,5 +1,6 @@
 # files
 
+
 # types
 *.log
 *.ini
@@ -7,3 +8,4 @@
 
 # folder
 photogate/photogate-backups/
+photogate/_autosave-photogate*
