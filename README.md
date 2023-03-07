@@ -11,8 +11,8 @@
 - `rotary.py` e `rotary_irq_esp.py`: https://github.com/miketeachman/micropython-rotary
 
 # Montagem
-[Lista de itens e montagem](http://htmlpreview.github.io/?https://github.com/MarcioBulla/Cronometro-Optico/blob/main/photogate/Item_List.html)
+[Lista de itens e montagem](http://htmlpreview.github.io/?https://github.com/MarcioBulla/Cronometro-Optico/blob/main/manual/Item_List.html)
 
-![Imagem sem componente](./photogate/photogate.png)
+![Imagem sem componente](./imagens/photogate.png)
 
-![Imagem com componente](./photogate/photogate(component).png)
+![Imagem com componente](./imagens/photogate(component).png)
