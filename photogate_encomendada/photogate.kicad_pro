@@ -363,12 +363,12 @@
   },
   "pcbnew": {
     "last_paths": {
-      "gencad": "",
-      "idf": "",
+      "gencad": "../../../../Desktop/photogate.cad",
+      "idf": "../../../../Desktop/photogate.emn",
       "netlist": "",
-      "specctra_dsn": "",
+      "specctra_dsn": "../../../../Desktop/photogate.dsn",
       "step": "../../../../Desktop/photogate.step",
-      "vrml": ""
+      "vrml": "../../../../Desktop/photogate.wrl"
     },
     "page_layout_descr_file": ""
   },
