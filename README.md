@@ -1,5 +1,5 @@
 # Photogate_V2
-I recomend use the second version:
+I recomend use the second version (improve precise, security, 3D model, interface and schematic): 
 https://github.com/Lorxi3D/PhotogateV2
 
 # Objetivo
