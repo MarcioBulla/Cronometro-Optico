@@ -1,10 +1,13 @@
+# Photogate_V2
+I recomend use the second version:
+https://github.com/Lorxi3D/PhotogateV2
+
 # Objetivo
 
 - [x] Programar o Esp32 com interface para cada experimento, assim facilitando o aluno realizar os experimentos;
 - [x] Criar um diagrama e um modelo 3D do Circuito; 
-- [ ] Modelar 3D todo o projeto, para uma impressão 3D;
-- [ ] Escrever um manual para auxiliar na manutenção ou construções de novos;
-- [ ] Publica trabalho sobre essa minha experiência.
+- [x] Modelar 3D todo o projeto, para uma impressão 3D;
+- [x] Publica trabalho (doi.org/10.1088/1361-6552/ad6d23).
 
 # Bibliotecas usadas
 - `encoder_menu.py`: https://github.com/MarcioBulla/encodermenu
@@ -13,6 +16,6 @@
 # Montagem
 [Lista de itens e montagem](http://htmlpreview.github.io/?https://github.com/MarcioBulla/Cronometro-Optico/blob/main/manual/Item_List.html)
 
-![Imagem sem componente](./imagens/photogate.png)
+![Imagem sem componente](./imagens/photogate_encomendado.png)
 
-![Imagem com componente](./imagens/photogate(component).png)
+![Imagem com componente](./imagens/photogate_encomendado(c).png)
