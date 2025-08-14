@@ -1,0 +1,3 @@
+# Ignorar só o BOM gerado
+./manual/Item_List.html linguist-generated=true
+
